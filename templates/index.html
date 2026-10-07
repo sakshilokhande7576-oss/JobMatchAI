@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobMatchAI</title>
+
+```
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+        color: #1f2937;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .header h1 {
+        margin-bottom: 8px;
+        font-size: 36px;
+    }
+
+    .header p {
+        color: #6b7280;
+        font-size: 17px;
+    }
+
+    .input-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .card,
+    .match-score,
+    .result-card,
+    .recommendation {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .card {
+        padding: 22px;
+    }
+
+    .card h3 {
+        margin-top: 0;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 250px;
+        padding: 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        resize: vertical;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: #2563eb;
+    }
+
+    .button-area {
+        text-align: center;
+        margin: 25px 0;
+    }
+
+    button {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 13px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #1d4ed8;
+    }
+
+    .secondary-button {
+        background: #6b7280;
+        margin-top: 20px;
+    }
+
+    .secondary-button:hover {
+        background: #4b5563;
+    }
+
+    .report {
+        margin-top: 30px;
+    }
+
+    .match-score {
+        text-align: center;
+        padding: 25px;
+        margin-bottom: 20px;
+    }
+
+    .score {
+        font-size: 42px;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .coverage {
+        color: #6b7280;
+    }
+
+    .results-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .result-card {
+        padding: 22px;
+    }
+
+    .result-card h3 {
+        margin-top: 0;
+    }
+
+    ul {
+        padding-left: 20px;
+    }
+
+    li {
+        margin-bottom: 8px;
+    }
+
+    .recommendation {
+        margin-top: 20px;
+        padding: 22px;
+    }
+
+    .new-analysis {
+        text-align: center;
+        margin-top: 25px;
+    }
+
+    .footer {
+        text-align: center;
+        margin-top: 35px;
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+        .input-grid,
+        .results-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .header h1 {
+            font-size: 30px;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<div class="header">
+    <h1>JobMatchAI</h1>
+    <p>ATS-Friendly Resume & Job Matching Tool</p>
+</div>
+
+{% if not result %}
+
+<form method="POST">
+
+    <div class="input-grid">
+
+        <div class="card">
+            <h3>Resume</h3>
+
+            <textarea
+                name="resume"
+                placeholder="Paste your resume here..."
+                required
+            ></textarea>
+        </div>
+
+        <div class="card">
+            <h3>Job Description</h3>
+
+            <textarea
+                name="job_description"
+                placeholder="Paste the job description here..."
+                required
+            ></textarea>
+        </div>
+
+    </div>
+
+    <div class="button-area">
+        <button type="submit">Analyze Match</button>
+    </div>
+
+</form>
+
+{% else %}
+
+<div class="report">
+
+    <div class="match-score">
+
+        <h2>ATS Match Report</h2>
+
+        <div class="score">
+            {{ result.match_percentage }}%
+        </div>
+
+        <div class="coverage">
+            Skill Coverage:
+            <strong>
+                {{ result.matched_count }} / {{ result.total_required }}
+            </strong>
+        </div>
+
+    </div>
+
+    <div class="results-grid">
+
+        <div class="result-card">
+
+            <h3>Matched Skills</h3>
+
+            {% if result.matched_skills %}
+
+            <ul>
+                {% for skill in result.matched_skills %}
+                <li>✓ {{ skill }}</li>
+                {% endfor %}
+            </ul>
+
+            {% else %}
+
+            <p>No matched skills detected.</p>
+
+            {% endif %}
+
+        </div>
+
+        <div class="result-card">
+
+            <h3>Missing Skills</h3>
+
+            {% if result.missing_skills %}
+
+            <ul>
+                {% for skill in result.missing_skills %}
+                <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+
+            {% else %}
+
+            <p>No missing skills detected.</p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <div class="recommendation">
+
+        <h3>Recommendation</h3>
+
+        {% if result.missing_skills %}
+
+        <p>
+            Focus on the missing skills:
+            <strong>
+                {{ result.missing_skills | join(", ") }}
+            </strong>.
+        </p>
+
+        {% else %}
+
+        <p>
+            Your resume covers all detected job skills.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+    <div class="new-analysis">
+
+        <button
+            type="button"
+            class="secondary-button"
+            onclick="window.location.href='/'"
+        >
+            ← Analyze Another Job
+        </button>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+<div class="footer">
+    JobMatchAI • Python • Flask • ATS Skill Matching
+</div>
+```
+
+</div>
+
+</body>
+</html>

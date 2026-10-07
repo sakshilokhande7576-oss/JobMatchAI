@@ -2,6 +2,8 @@
 Resume and job description text parser for JobMatchAI.
 """
 
+import re
+
 
 def normalize_text(text):
     """Normalize text for matching."""
@@ -58,7 +60,9 @@ def extract_keywords(text):
     found = []
 
     for skill in known_skills:
-        if skill in normalized:
+        pattern = r"(?<!\w)" + re.escape(skill) + r"(?!\w)"
+
+        if re.search(pattern, normalized):
             found.append(skill)
 
     return sorted(set(found))
