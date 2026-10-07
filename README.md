@@ -1,86 +1,121 @@
-\# JobMatchAI
+# JobMatchAI
 
+ATS-Friendly Resume & Job Matching Tool
 
+JobMatchAI is a Python and Flask-based portfolio project that compares a resume with a job description and identifies matched and missing technical skills.
 
-\*\*ATS-Friendly Resume \& Job Matching Tool\*\*
+## Features
 
+- Resume and job description input
+- Automatic skill extraction
+- Matched skill detection
+- Missing skill detection
+- ATS match percentage
+- Skill coverage count
+- Skill recommendations
+- Flask web interface
+- Automated tests
+- AWS Lambda-ready handler
+- Git/GitHub version control
 
+## Technology Stack
 
-JobMatchAI is a Python-based portfolio project that compares a resume with a job description and identifies how closely the resume matches the required technical skills.
+- Python
+- Flask
+- HTML/CSS
+- Git & GitHub
+- AWS Lambda
 
-
-
-It is designed as a simple, explainable ATS-style matching system for fresher job applications.
-
-
-
-\## Features
-
-
-
-\- Resume text input
-
-\- Job description input
-
-\- Automatic skill extraction
-
-\- Matched skill detection
-
-\- Missing skill detection
-
-\- ATS match percentage
-
-\- Skill coverage count
-
-\- Missing-skill recommendation
-
-\- Automated unit tests
-
-\- CLI-based interface
-
-\- No external dependencies
-
-
-
-\## How It Works
-
-
-
-```text
+## How It Works
 
 Resume
-
-&#x20;  |
-
-&#x20;  v
-
+   |
+   v
 Skill Extraction
+   |
+   v
+Job Description Analysis
+   |
+   v
+Skill Comparison
+   |
+   +--> Matched Skills
+   |
+   +--> Missing Skills
+   |
+   +--> Match Percentage
+   |
+   +--> Recommendation
 
-&#x20;  |
+## Run Locally
 
-&#x20;  v
+Install dependencies:
 
-+----------------------+
+pip install -r requirements.txt
 
-| Compare with Job     |
+Run the application:
 
-| Requirements         |
+python -m app.web
 
-+----------------------+
+Open:
 
-&#x20;  |
+http://127.0.0.1:5000
 
-&#x20;  +----> Matched Skills
+## Testing
 
-&#x20;  |
+Run:
 
-&#x20;  +----> Missing Skills
+python -m pytest -q
 
-&#x20;  |
+Current test result:
 
-&#x20;  +----> Match Percentage
+3 passed
 
-&#x20;  |
+## AWS Lambda Readiness
 
-&#x20;  +----> Recommendation
+The project includes a Lambda-compatible handler in:
 
+lambda_function.py
+
+The handler has been tested locally and successfully returns HTTP 200 with the Flask application response.
+
+A clean Lambda deployment ZIP has also been prepared.
+
+AWS deployment is optional and is kept separate to avoid unnecessary cloud resources and costs.
+
+## Project Structure
+
+JobMatchAI/
+|
+|-- app/
+|   |-- main.py
+|   |-- matcher.py
+|   |-- parser.py
+|   |-- scorer.py
+|   |-- web.py
+|   `-- __init__.py
+|
+|-- templates/
+|   `-- index.html
+|
+|-- tests/
+|-- lambda_function.py
+|-- requirements.txt
+`-- README.md
+
+## Project Goal
+
+This project demonstrates practical skills in:
+
+- Python development
+- Flask web development
+- Text processing
+- Rule-based skill matching
+- Automated testing
+- Git/GitHub
+- AWS Lambda deployment concepts
+
+## Author
+
+Sakshi Lokhande
+Computer Science & Engineering
